@@ -27,6 +27,7 @@ public class RiceCooker6000 {
         VoltageRatioInput vAxis = new VoltageRatioInput(); 
         VoltageRatioInput hAxis = new VoltageRatioInput(); 
         Light lightSensor = new Light();
+        DistanceSensor sonar = new DistanceSensor();
         //Button greenButton = new Button();
 
         //Address
@@ -40,6 +41,7 @@ public class RiceCooker6000 {
         rightMotors.open(5000);
         vAxis.open(5000);
         hAxis.open(5000);
+        sonar.open(5000);
 
         //Increase acceleration 
         leftMotors.setAcceleration(leftMotors.getMaxAcceleration());
@@ -58,7 +60,24 @@ public class RiceCooker6000 {
             //System.out.println(lightSensor.getLight());
             
             if (autonomous){
-                if (lightSensor.getLight() > 50){
+                if (sonar.getDistance() < 400) {
+                        //Object detected! Stop motors
+                        leftMotors.setTargetVelocity(0);
+                        rightMotors.setTargetVelocity(0);
+
+                        Thread.sleep(250);
+
+                        leftMotors.setTargetVelocity(-0.5);
+                        rightMotors.setTargetVelocity(0.5);
+
+                        Thread.sleep(1500);
+                        
+                        leftMotors.setTargetVelocity(-0.5);
+                        rightMotors.setTargetVelocity(-0.5);
+                        
+                        Thread.sleep(1000);
+                }
+                else if (lightSensor.getLight() > 50){
                     leftMotorsSpeed = -0.5;
                     rightMotorsSpeed = -0.5;
                 }
